@@ -11,31 +11,34 @@
 class Envelope {
 public:
     struct Stage {
-        easing::function shape;	
-	float start;
-	float end;
-	float time;
+        easing::function shape;
+        float start;
+        float end;
+        float time;
     };
-    
+
     enum class MoveState {
         idle,
         moving
     };
 
     enum class LoopMode {
-	// treat stages as a fixed, looping sequence
-	sequence,
-	// consume each stage (FIFO), then stop
-	queue
-    }
+        // treat stages as a fixed, looping sequence
+                sequence,
+        // consume each stage (FIFO), then stop
+                queue
+    };
+
     // fill an output buffer with values
 public:
     MoveState moveState;
-    
-    void processSample();
-    void addStage(float target, float time, float shape=easing::function::none);
-    
-    
+
+    float processSample();
+
+    void addStage(float target, float time, easing::function shape = easing::function::none);
+    void removeFirstStage();
+    void removeLastStage();
+    void clearAllStages();
 };
 
 

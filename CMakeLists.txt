@@ -1,19 +1,19 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.7)
 project(dsp_kit)
 
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
-add_executable(fifo-test
-        fifo-test.cpp
+add_executable(test-fifo
+        test-fifo.cpp
         fifo.hpp)
 
-add_executable(smoothing-test
-        smoothing-test.cpp
+add_executable(test-smoothing
+        test-smoothing.cpp
         Smoothing.hpp)
 
-add_executable(envelope-test
-        envelope-test.cpp
+add_executable(test-envelope
+        test-envelope.cpp
         Envelope.cpp
         Envelope.hpp)
