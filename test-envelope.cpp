@@ -5,5 +5,7 @@
 #include "Envelope.hpp"
 
 int main() {
-    return 0;
+    Envelope env;
+    env.setValue(0);
+    env.addStage()
 }

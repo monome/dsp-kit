@@ -69,7 +69,6 @@ namespace dspkit {
             }
         }
 
-
         // get a pointer to the first element
         // @returns pointer or nullptr
         const T *front() {
@@ -80,6 +79,26 @@ namespace dspkit {
                 return nullptr;
             }
         }
+
+        // get a pointer to the first element, with an offset
+        // NB: there is no check
+        // @returns pointer or nullptr
+        const T *front(int offset) {
+            if (size_ > 0) {
+                int ix;
+                if (offset >= size_) {
+                    ix = rdIx_ + size_ - 1;
+                } else {
+                    ix = rdIx_ + offset;
+                }
+                while (ix >= capacity) { ix -= capacity; }
+                assert(buf_[ix].used == true);
+                return &(buf_[ix].value);
+            } else {
+                return nullptr;
+            }
+        }
+
 
         // get a pointer to the last element
         // @returns pointer or nullptr
