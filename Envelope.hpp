@@ -3,10 +3,7 @@
 //
 // general-purpose envelope class,
 // with arbitrary sequencing behavior and shape functions./
-/ suitable for
-audio DSP, but
-NOT threadsafe
-!
+// suitable for audio DSP, but NOT threadsafe!
 
 #ifndef DSP_KIT_ENVELOPE_HPP
 #define DSP_KIT_ENVELOPE_HPP
@@ -84,7 +81,7 @@ private:
     static constexpr int maxStages = 32;
     dspkit::fifo<Stage, maxStages> stageQ;
     MoveState moveState; // current state (idle/moving)
-    SequenceMode loopMode; // current sequence mode
+    SequenceMode sequenceMode; // current sequence mode
 
     easing::function riseShape; // default shape for rising segments
     easing::function fallShape; // default shape for falling segments

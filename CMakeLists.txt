@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
+add_subdirectory(lib/cnpy)
+
 add_executable(test-fifo
         test-fifo.cpp
         fifo.hpp)
@@ -17,3 +19,5 @@ add_executable(test-envelope
         test-envelope.cpp
         Envelope.cpp
         Envelope.hpp)
+
+target_link_libraries(test-envelope cnpy)

@@ -9,7 +9,6 @@ void Envelope::setSampleRate(float sr) {
     this->sr = sr;
 }
 
-
 float Envelope::processSample() {
     if (moveState == MoveState::moving) {
         updateValue();
@@ -24,8 +23,6 @@ void Envelope::addStage(float target, float time, easing::function shape) {
 }
 
 
-
-
 void Envelope::popStage() {
     Stage stage{};
     stageQ.pop(stage);
@@ -37,7 +34,7 @@ void Envelope::clearStages() {
 
 void Envelope::nextStage() {
     Stage stage{};
-    switch (loopMode) {
+    switch (sequenceMode) {
         case SequenceMode::queue:
             if (stageQ.pop(stage)) {
                 go(stage.target, stage.time, stage.shape);
@@ -81,7 +78,7 @@ void Envelope::updatePhase() {
 }
 
 void Envelope::setSequenceMode(Envelope::SequenceMode mode) {
-
+    sequenceMode = mode;
 }
 
 float Envelope::setRiseShape(easing::function shape) {
