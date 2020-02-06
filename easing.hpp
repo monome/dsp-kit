@@ -150,7 +150,7 @@ namespace easing {
     template<typename T>
     T in_circular(T x) {
         x = 1 - x * x;
-        return 1 - sqrt(std::max(x, 0.0));
+        return 1 - sqrt(std::max(x, static_cast<T>(0.0)));
     }
 
 
@@ -163,10 +163,10 @@ namespace easing {
     T in_out_circular(T x) {
         if (x < 0.5) {
             x = 1 - 4 * (x * x);
-            return 0.5 * (1 - sqrt(std::max(x, 0.0)));
+            return 0.5 * (1 - sqrt(std::max(x, static_cast<T>(0.0))));
         } else {
             x = -((2 * x) - 3) * ((2 * x) - 1);
-            return 0.5 * (sqrt(std::max(x, 0.0)) + 1);
+            return 0.5 * (sqrt(std::max(x, static_cast<T>(0.0))) + 1);
         }
     }
 
@@ -179,7 +179,7 @@ namespace easing {
     template<typename T>
     T out_circular(T x) {
         x = (2 - x) * x;
-        return sqrt(std::max(x, 0.0));
+        return sqrt(std::max(x, static_cast<T>(0.0)));
     }
 
 
@@ -599,76 +599,75 @@ namespace easing {
     ///	@return		The easing function, which takes input X and returns eased value Y. 
 
     template<typename T>
-    const std::function<T(T)> get(easing::function shape) {
+    std::function<T(T)> get(easing::function shape) {
         switch (shape) {
             case easing::function::linear:
-                return linear;
+                return easing::linear<T>;
             case easing::function::in_back:
-                return in_back;
+                return easing::in_back<T>;
             case easing::function::in_out_back:
-                return in_out_back;
+                return easing::in_out_back<T>;
             case easing::function::out_back:
-                return out_back;
+                return easing::out_back<T>;
             case easing::function::in_bounce:
-                return in_bounce;
+                return easing::in_bounce<T>;
             case easing::function::in_out_bounce:
-                return in_out_bounce;
+                return easing::in_out_bounce<T>;
             case easing::function::out_bounce:
-                return out_bounce;
+                return easing::out_bounce<T>;
             case easing::function::in_circular:
-                return in_circular;
+                return easing::in_circular<T>;
             case easing::function::in_out_circular:
-                return in_out_circular;
+                return easing::in_out_circular<T>;
             case easing::function::out_circular:
-                return out_circular;
+                return easing::out_circular<T>;
             case easing::function::in_cubic:
-                return in_cubic;
+                return easing::in_cubic<T>;
             case easing::function::in_out_cubic:
-                return in_out_cubic;
+                return easing::in_out_cubic<T>;
             case easing::function::out_cubic:
-                return out_cubic;
+                return easing::out_cubic<T>;
             case easing::function::in_elastic:
-                return in_elastic;
+                return easing::in_elastic<T>;
             case easing::function::in_out_elastic:
-                return in_out_elastic;
+                return easing::in_out_elastic<T>;
             case easing::function::out_elastic:
-                return out_elastic;
+                return easing::out_elastic<T>;
             case easing::function::in_exponential:
-                return in_exponential;
+                return easing::in_exponential<T>;
             case easing::function::in_out_exponential:
-                return in_out_exponential;
+                return easing::in_out_exponential<T>;
             case easing::function::out_exponential:
-                return out_exponential;
+                return easing::out_exponential<T>;
             case easing::function::in_quadratic:
-                return in_quadratic;
+                return easing::in_quadratic<T>;
             case easing::function::in_out_quadratic:
-                return in_out_quadratic;
+                return easing::in_out_quadratic<T>;
             case easing::function::out_quadratic:
-                return out_quadratic;
+                return easing::out_quadratic<T>;
             case easing::function::in_quartic:
-                return in_quartic;
+                return easing::in_quartic<T>;
             case easing::function::in_out_quartic:
-                return in_out_quartic;
+                return easing::in_out_quartic<T>;
             case easing::function::out_quartic:
-                return out_quartic;
+                return easing::out_quartic<T>;
             case easing::function::in_quintic:
-                return in_quintic;
+                return easing::in_quintic<T>;
             case easing::function::in_out_quintic:
-                return in_out_quintic;
+                return easing::in_out_quintic<T>;
             case easing::function::out_quintic:
-                return out_quintic;
+                return easing::out_quintic<T>;
             case easing::function::in_sine:
-                return in_sine;
+                return easing::in_sine<T>;
             case easing::function::in_out_sine:
-                return in_out_sine;
+                return easing::in_out_sine<T>;
             case easing::function::out_sine:
-                return out_sine;
+                return easing::out_sine<T>;
             case easing::function::enum_count:
                 assert(false);
             case easing::function::none:
                 assert(false);
         }
-        return 0.0;
     }
 
 
