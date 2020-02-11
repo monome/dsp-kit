@@ -40,6 +40,8 @@ public:
     void setValue(float val);
 
 public:
+    Envelope();
+
     // change the sample rate
     // (NB: this will only take effect on next stage or `execute`)
     void setSampleRate(float sr);
@@ -55,6 +57,9 @@ public:
 
     // set the default shape for falling segments
     float setFallShape(easing::function shape = easing::function::linear);
+
+    // set callback function
+    float setCallback(std::function<void(float)> fn);
 
     // immediately execute a movement with given stage data.
     // if a stage is currently being executed, this will pivot from the current value
@@ -86,7 +91,7 @@ private:
     easing::function riseShape; // default shape for rising segments
     easing::function fallShape; // default shape for falling segments
     std::function<float(float)> shapeFunc; // current easing function
-    std::function<float()> callback; // current callback function
+    std::function<void(float)> callback; // current callback function
 
     float phase; // current phase in [0,1]
     float value; // current output value

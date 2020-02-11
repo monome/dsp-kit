@@ -8,16 +8,23 @@ include_directories(.)
 add_subdirectory(lib/cnpy)
 
 add_executable(test-fifo
-        test-fifo.cpp
+        test/test-fifo.cpp
         fifo.hpp)
 
 add_executable(test-smoothing
-        test-smoothing.cpp
+        test/test-smoothing.cpp
         Smoothing.hpp)
 
 add_executable(test-envelope
-        test-envelope.cpp
+        test/test-envelope.cpp
         Envelope.cpp
         Envelope.hpp)
 
+add_executable(test-svf
+        test/test-svf.cpp
+        Svf.cpp
+        Svf.hpp)
+
 target_link_libraries(test-envelope cnpy)
+
+target_link_libraries(test-svf sndfile)

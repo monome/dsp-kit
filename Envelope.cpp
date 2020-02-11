@@ -3,7 +3,19 @@
 //
 
 #include <cassert>
+#include <iostream>
+
 #include "Envelope.hpp"
+
+Envelope::Envelope() {
+    callback = nullptr;
+    value = 0.f;
+    start=0.f;
+    end = 0.f;
+    inc = 0.f;
+    scale = 0.f;
+    moveState = MoveState::idle;
+}
 
 void Envelope::setSampleRate(float sr) {
     this->sr = sr;
@@ -13,6 +25,10 @@ float Envelope::processSample() {
     if (moveState == MoveState::moving) {
         updateValue();
         updatePhase();
+    } else {
+        if (stageQ.size() > 0) {
+            nextStage();
+        }
     }
     return value;
 }
@@ -41,14 +57,14 @@ void Envelope::nextStage() {
             }
             break;
         case SequenceMode::loop:
-            // FIXME: use index
+            // FIXME: use explicit indexing (i guess)
             if (stageQ.pop(stage)) {
                 stageQ.push(stage);
                 go(stage.target, stage.time, stage.shape);
             }
             break;
         case SequenceMode::oneshot:
-            // TODO
+            // TODO, needs indexing
             break;
     }
 }
@@ -57,8 +73,12 @@ void Envelope::go(float target, float time, easing::function shape) {
     bool rising = target >= value;
     start = value;
     end = target;
-    scale = target - value;
+    scale = end-start;
     inc = 1.f / (time * sr);
+    phase = 0.f;
+
+    std::cout << "going; start=" << value << "; end=" << target << "; scale=" << scale << std::endl;
+
     moveState = MoveState::moving;
     if (shape == easing::function::none) {
         shapeFunc = easing::get<float>(rising ? this->riseShape : this->fallShape);
@@ -74,6 +94,9 @@ void Envelope::updatePhase() {
     if (phase > 1.f) {
         phase = 1.f;
         moveState = MoveState::idle;
+        if (callback != nullptr) {
+            callback(value);
+        }
     }
 }
 
@@ -93,4 +116,8 @@ void Envelope::setValue(float val) {
     value = val;
     end = val;
     moveState = MoveState::idle;
+}
+
+float Envelope::setCallback(std::function<void(float)> fn) {
+    callback = fn;
 }
