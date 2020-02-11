@@ -7,28 +7,26 @@
 using dspkit::Svf;
 using dspkit::Lut;
 
-Svf::Svf() : gtab(nullptr) {
+Svf::Svf() {
     clear();
 }
 
-void Svf::initPitchTable(double sr, double baseFreq, double numOct, int size) {
+void Svf::initPitchTable(double sr, double baseFreq, double numOct) {
     this->sr = static_cast<float>(sr);
-    gtab = std::make_unique<float[]>(size);
     // base-2 logarithmic pitch increment per entry
-    double inc = numOct / (double) size;
+    double inc = numOct / static_cast<double>(gTabSize);
     double exp = 0.0;
     double f;
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < gTabSize; ++i) {
         f = baseFreq * pow(2.0, exp);
         // std::cout << f << std::endl;
         exp += inc;
-        gtab[i] = static_cast<float>(tan(M_PI * f / sr));
+        gTab[i] = static_cast<float>(tan(M_PI * f / sr));
     }
-    gtabSize = size;
 }
 
 void Svf::setFcPitch(float pitch) {
-    this->g = Lut<float>::lookupLinear(pitch, gtab.get(), gtabSize);
+    this->g = Lut<float>::lookupLinear(pitch, gTab.data(), gTabSize);
     calcSecondaryCoeffs();
 }
 
@@ -95,7 +93,6 @@ void Svf::setBpMix(float mix) {
 void Svf::setBrMix(float mix) {
     brMix = mix;
 }
-
 
 // calculate only secondary coefficients, given primary (e.g. from LUT)
 void Svf::calcSecondaryCoeffs() {

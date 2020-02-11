@@ -1,7 +1,7 @@
 #ifndef DSPKIT_SVF_H
 #define DSPKIT_SVF_H
 
-#include <memory>
+#include <array>
 
 namespace dspkit {
 
@@ -14,7 +14,7 @@ namespace dspkit {
         // @param sr: sample rate
         // @param baseFreq: base frequency (pitch == 0)
         // @param numOct: how many octaves to compute above base frequency
-        void initPitchTable(double sr, double baseFreq = 14.1, double numOct = 10.f, int size = 1024);
+        void initPitchTable(double sr, double baseFreq = 14.1, double numOct = 10.f);
 
         // clear the internal fiter state
         void clear();
@@ -45,9 +45,9 @@ namespace dspkit {
         void calcSecondaryCoeffs();
 
     private:
-        // heap-allocated lookup table for primary coefficient (pitch-wise)
-        std::unique_ptr<float[]> gtab;
-        size_t gtabSize;
+        static constexpr size_t gTabSize = 1024;
+        // lookup table for primary coefficient (pitch-wise)
+        std::array<float, gTabSize> gTab;
 
         // sample rate
         float sr;
