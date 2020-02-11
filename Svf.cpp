@@ -1,4 +1,5 @@
 #include <cmath>
+//#include <iostream>
 
 #include "Lut.hpp"
 #include "Svf.hpp"
@@ -19,6 +20,7 @@ void Svf::initPitchTable(double sr, double baseFreq, double numOct, int size) {
     double f;
     for (int i = 0; i < size; ++i) {
         f = baseFreq * pow(2.0, exp);
+        // std::cout << f << std::endl;
         exp += inc;
         gtab[i] = static_cast<float>(tan(M_PI * f / sr));
     }
@@ -26,7 +28,7 @@ void Svf::initPitchTable(double sr, double baseFreq, double numOct, int size) {
 }
 
 void Svf::setFcPitch(float pitch) {
-    float g = Lut<float>::lookupLinear(pitch, gtab.get(), gtabSize);
+    this->g = Lut<float>::lookupLinear(pitch, gtab.get(), gtabSize);
     calcSecondaryCoeffs();
 }
 
@@ -43,7 +45,7 @@ void Svf::calcCoeffs() {
 
 float Svf::processSample(float in) {
     update(in);
-    return lp * lpMix + bp * bpMix + hp * hpMix + br * brMix;
+    return lp*lpMix + bp*bpMix + hp*hpMix + br*brMix;
 }
 
 void Svf::update(float in) {
@@ -64,17 +66,17 @@ void Svf::update(float in) {
 
 
 void Svf::setSr(float sr) {
-    sr = sr;
+    this->sr = sr;
     calcCoeffs();
 }
 
 void Svf::setFc(float fc) {
-    fc = (fc > sr / 2) ? sr / 2 : fc;
+    this->fc = (fc > sr/2) ? sr/2 : fc;
     calcCoeffs();
 }
 
 void Svf::setRq(float rq) {
-    rq = rq;
+    this->rq = rq;
     calcSecondaryCoeffs();
 }
 
