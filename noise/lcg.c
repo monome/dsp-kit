@@ -1,3 +1,4 @@
+#include <malloc.h>
 #include "lcg.h"
 
 struct lcg* lcg_new() {
