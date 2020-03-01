@@ -3,4 +3,4 @@ project(dsp_kit)
 
 add_executable(test-noise
         lcg.c
-        test-lcg.c)
+        test-noise.c)
