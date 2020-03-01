@@ -9,7 +9,7 @@ add_subdirectory(lib/cnpy)
 
 add_executable(test-fifo
         test/test-fifo.cpp
-        fifo.hpp)
+        Fifo.hpp)
 
 add_executable(test-smoothing
         test/test-smoothing.cpp
@@ -28,3 +28,5 @@ add_executable(test-svf
 target_link_libraries(test-envelope cnpy)
 
 target_link_libraries(test-svf sndfile)
+
+add_subdirectory(noise)

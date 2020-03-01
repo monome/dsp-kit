@@ -11,7 +11,7 @@
 #include <functional>
 
 #include "easing.hpp"
-#include "fifo.hpp"
+#include "Fifo.hpp"
 
 class Envelope {
 
@@ -84,7 +84,7 @@ private:
 
 private:
     static constexpr int maxStages = 32;
-    dspkit::fifo<Stage, maxStages> stageQ;
+    dspkit::Fifo<Stage, maxStages> stageQ;
     MoveState moveState; // current state (idle/moving)
     SequenceMode sequenceMode; // current sequence mode
 

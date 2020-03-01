@@ -14,7 +14,7 @@
 namespace dspkit {
 
     template<typename T, int capacity>
-    class fifo {
+    class Fifo {
     private:
 
         // data buffer, accessed circularly
@@ -33,7 +33,7 @@ namespace dspkit {
         int size_;
 
     public:
-        fifo() : wrIx_(0), wrIx0_(0), rdIx_(0), size_(0) {}
+        Fifo() : wrIx_(0), wrIx0_(0), rdIx_(0), size_(0) {}
 
         // push a value to the back of the queue
         // @param value

@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "fifo.hpp"
+#include "Fifo.hpp"
 
 using namespace dspkit;
 
 int main() {
     constexpr int n = 100;
-    fifo<int, n> fifo;
+    Fifo<int, n> fifo;
 
     for (int i=0; i<n+1; ++i) {
         if( fifo.push(i) ) {

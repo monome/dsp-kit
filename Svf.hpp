@@ -16,7 +16,7 @@ namespace dspkit {
         // @param numOct: how many octaves to compute above base frequency
         void initPitchTable(double sr, double baseFreq = 14.1, double numOct = 10.f);
 
-        // clear the internal fiter state
+        // clear the internal filter state
         void clear();
 
         // process one input sample, returning one output sample
