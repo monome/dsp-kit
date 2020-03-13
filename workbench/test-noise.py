@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.fftpack
-
+#import scipy.fftpack
+import scipy.fft
 
 lcg_data = np.genfromtxt('../noise/lcg_values.txt', delimiter=',')[:-1]
 print (lcg_data)
@@ -12,9 +12,12 @@ print (pink_data)
 
 def plot_spectrum(name, data):
     N = len(data)
-    Z = scipy.fftpack.fft(data)
-    fig, ax = plt.subplots()
-    ax.plot(np.arange(0, N/2), 2.0/N * np.abs(Z[:N//2]))
+    #Z = scipy.fftpack.fft(data)
+    #Z = scipy.fftpack.rfft(data)
+    Z = scipy.fft.rfft(data, None, 0)
+    fig, ax = plt.subplots(2, 1)
+    ax[0].plot(data)
+    ax[1].plot(np.abs(Z))
     plt.title(name)
     plt.show()
 

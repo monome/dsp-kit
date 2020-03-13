@@ -23,7 +23,7 @@ add_executable(test-envelope
 add_executable(test-svf
         test/test-svf.cpp
         Svf.cpp
-        Svf.hpp)
+        Svf.hpp)      
 
 target_link_libraries(test-envelope cnpy)
 

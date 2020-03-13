@@ -7,6 +7,7 @@
 
 #include "lcg.h"
 #include "pink.h"
+#include "poisson.h"
 
 void test_lcg_speed() {
     float x;
@@ -81,6 +82,16 @@ void test_pink_signal(int frames) {
     sf_close(sf);
     free(buf);
     pink_delete(pink);
+    lcg_delete(lcg);
+}
+
+void test_poisson_signal(int frames) {
+    struct lcg *lcg = lcg_new();
+    float x, y;
+    
+    for (int i=0; i<frames; ++i) {
+	
+    }
 }
 
 int main() {

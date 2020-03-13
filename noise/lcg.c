@@ -41,3 +41,32 @@ void lcg_add(struct lcg* lcg, int32_t c) {
     lcg->c = c;
 }
 
+
+//-----------------
+//--- static
+
+// static instance for one-off random values
+//static struct lcg lcg_single;
+
+
+/*
+float lcg_get_float() {
+    return lcg_get_float(lcg_single);
+}
+
+int lcg_get_int() {
+    return lcg_get_int(lcg_single);
+}
+
+void lcg_seed(int32_t x) {
+    lcg_seed(lcg_single, x);
+}
+
+void lcg_mul(int32_t a) {
+    lcg_mul(lcg_single, a);
+}
+
+void lcg_add(int32_t c) {
+    lcg_add(lcg_single, c);
+}
+*/
