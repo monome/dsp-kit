@@ -48,7 +48,6 @@ void lcg_add(struct lcg* lcg, int32_t c) {
 // static instance for one-off random values
 //static struct lcg lcg_single;
 
-
 /*
 float lcg_get_float() {
     return lcg_get_float(lcg_single);
