@@ -19,14 +19,18 @@ add_executable(test-envelope
         test/test-envelope.cpp
         Envelope.cpp
         Envelope.hpp)
+target_link_libraries(test-envelope cnpy)
 
 add_executable(test-svf
         test/test-svf.cpp
         Svf.cpp
-        Svf.hpp)      
-
-target_link_libraries(test-envelope cnpy)
-
+        Svf.hpp)
 target_link_libraries(test-svf sndfile)
+
+add_executable(test-ladder-lpf
+        test/test-ladder-lpf.cpp
+        LadderLpf.hpp)
+target_link_libraries(test-ladder-lpf sndfile)
+
 
 add_subdirectory(noise)
