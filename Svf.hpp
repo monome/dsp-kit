@@ -25,11 +25,11 @@ namespace dspkit {
         // set the corner frequency as linear pitch
         // mapping is dependent on parameters passed to `initPitchTable()`
         // @param pitch: linear pitch in [0, 1]
-        void setFcPitch(float pitch);
+        void setCutoffPitch(float pitch);
 
-        void setSr(float sr);
-        void setFc(float fc);
-        void setRq(float rq);
+        void setSampleRate(float sr);
+        void setCutoff(float fc);
+        void setInverseQ(float rq);
         void setLpMix(float mix);
         void setHpMix(float mix);
         void setBpMix(float mix);
@@ -37,10 +37,8 @@ namespace dspkit {
 
     private:
         void update(float x);
-
         // recalculate all coefficients for current fc, sr, rq
         void calcCoeffs();
-
         // recalculate cheaper conefficients for RQ only (no `tan`)
         void calcSecondaryCoeffs();
 
