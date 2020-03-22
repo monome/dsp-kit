@@ -25,7 +25,7 @@ void Svf::initPitchTable(double sr, double baseFreq, double numOct) {
     }
 }
 
-void Svf::setFcPitch(float pitch) {
+void Svf::setCutoffPitch(float pitch) {
     this->g = Lut<float>::lookupLinear(pitch, gTab.data(), gTabSize);
     calcSecondaryCoeffs();
 }
@@ -63,17 +63,17 @@ void Svf::update(float in) {
 }
 
 
-void Svf::setSr(float sr) {
+void Svf::setSampleRate(float sr) {
     this->sr = sr;
     calcCoeffs();
 }
 
-void Svf::setFc(float fc) {
+void Svf::setCutoff(float fc) {
     this->fc = (fc > sr/2) ? sr/2 : fc;
     calcCoeffs();
 }
 
-void Svf::setRq(float rq) {
+void Svf::setInverseQ(float rq) {
     this->rq = rq;
     calcSecondaryCoeffs();
 }

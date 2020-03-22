@@ -2,6 +2,9 @@
 // after v. zavalashin and w. pirkle
 
 #include <array>
+#include <cmath>
+
+#include <iostream>
 
 namespace dspkit {
     template<typename T>
@@ -18,17 +21,18 @@ namespace dspkit {
             t = 1 / sr;
         }
 
-        void setFc(T fc) {
+        void setCutoff(T fc) {
             static constexpr double twopi = 6.2831853071796;
             T wd = twopi * fc;
             T wa = 2 / t * tan(wd * t / 2);
-            T g = wa * t / 2;
+            g = wa * t / 2;
             G = g / (1 + g);
         }
 
         void setQ(T q) {
             // assuming Q in (0, ~20]
             k = 4 * (q - 0.707) / (25 - 0.707);
+            std::cout << k << std::endl;
         }
 
         T stage(T x, T &z) {

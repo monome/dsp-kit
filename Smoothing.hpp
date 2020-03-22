@@ -23,7 +23,7 @@ public:
         calcCoeff();
     }
 
-    static float smooth(float x, float x0, float c) {
+    static float s(float x, float x0, float c) {
         return x + c * (x0 - x);
     }
 
@@ -137,7 +137,7 @@ public:
 };
 
 //--------------------------------------
-
+// FIXME: needs work, or remove
 class ExpLogSmoother {
     ThirdOrderFilter attack;
     OnePoleSmoother decay;
@@ -173,7 +173,7 @@ public:
     float processSample(float x) {
         float y;
 
-#if 0 // testing..
+#if 1 // testing..
         if (x > y0) {
             y = attack.processSample(x);
         } else {
