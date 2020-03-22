@@ -15,16 +15,12 @@ std::default_random_engine randEngine;
 std::uniform_real_distribution<float> randDist(0, 1);
 
 dspkit::LadderLpf<float> lpf;
-
-// store modulated frequency/pitch in own buffer for good profiling comparison
 float freqBuf[numFrames];
-float pitchBuf[numFrames];
 
 static void fillModBuffers() {
     float modInc = 4.0 / sr;
     float modPhase = 0;
     float mod = 0;
-
 
     for (int fr = 0; fr < numFrames; ++fr) {
         modPhase += modInc;
