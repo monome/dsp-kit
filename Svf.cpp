@@ -13,16 +13,19 @@ Svf::Svf() {
 
 void Svf::initPitchTable(double sr, double baseFreq, double numOct) {
     this->sr = static_cast<float>(sr);
+    auto sz_1 = gTabSize -1;
     // base-2 logarithmic pitch increment per entry
-    double inc = numOct / static_cast<double>(gTabSize);
+    double inc = numOct / static_cast<double>(sz_1);
     double exp = 0.0;
     double f;
-    for (int i = 0; i < gTabSize; ++i) {
+    for (int i = 0; i < sz_1; ++i) {
         f = baseFreq * pow(2.0, exp);
         // std::cout << f << std::endl;
         exp += inc;
         gTab[i] = static_cast<float>(tan(M_PI * f / sr));
     }
+    // extra element for "extended" lookup
+    gTab[sz_1] = gTab[sz_1 - 1];
 }
 
 void Svf::setCutoffPitch(float pitch) {
