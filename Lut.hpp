@@ -4,12 +4,10 @@ namespace dspkit {
     class Lut {
     public:
         // look up a value from a table with normalized position
-        // warning: no bounds checking on position!
-        // must be in [0, 1] or you get garbage.
+        // NB:
+        // - no bounds checking on position! must be in [0, 1] or you get garbage.
+        // - table should be "extended" with an extra duplicate or wrapped element as appropriate
         static T lookupLinear(float x, const T *tab, unsigned int size) {
-            // table is assumed to be "extended",
-            // with an extra duplicate or wrapped element as appropriate.
-            // this saves a branch
             const unsigned int size_2 = size - 2;
             const float fidx = x * static_cast<float>(size_2);
             const auto idx = static_cast<unsigned int>(fidx);
