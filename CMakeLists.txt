@@ -32,5 +32,10 @@ add_executable(test-ladder-lpf
         LadderLpf.hpp)
 target_link_libraries(test-ladder-lpf sndfile)
 
+add_executable(test-dc-blocker
+        test/test-dc-blocker.cpp
+        DcBlocker.hpp)
+target_link_libraries(test-dc-blocker sndfile)
+
 
 add_subdirectory(noise)
