@@ -6,6 +6,9 @@
 
 #include <iostream>
 
+#include "Lut.hpp"
+#include "Constants.hpp"
+
 namespace dspkit {
     template<typename T>
     class LadderLpf {
@@ -16,14 +19,42 @@ namespace dspkit {
 
         std::array<T, 4> z1; // storage element per stage
 
+        // table of
+        static constexpr size_t gTabSize = 1024;
+        // lookup table for primary coefficient (pitch-wise)
+        std::array<float, gTabSize> gTab;
+
     public:
         void init(T sr) {
             t = 1 / sr;
         }
 
+        void initPitchTable(double sr, double baseFreq, double numOct) {
+            this->sr = static_cast<float>(sr);
+            auto sz_1 = gTabSize -1;
+            // base-2 logarithmic pitch increment per entry
+            double inc = numOct / static_cast<double>(sz_1);
+            double exp = 0.0;
+            double f;
+            for (int i = 0; i < sz_1; ++i) {
+                f = baseFreq * pow(2.0, exp);
+                // std::cout << f << std::endl;
+                exp += inc;
+                T wd = Constants::twopi * f;
+                T wa = 2 / t * tan(wd * t / 2);
+                gTab[i] = wa * t / 2;
+            }
+            // extra element for "extended" lookup
+            gTab[sz_1] = gTab[sz_1 - 1];
+        }
+
+        void setCutoffPitch(float pitch) {
+            this->g = Lut<float>::lookupLinear(pitch, gTab.data(), gTabSize);
+            G = g / (1 + g);
+        }
+
         void setCutoff(T fc) {
-            static constexpr double twopi = 6.2831853071796;
-            T wd = twopi * fc;
+            T wd = Constants::twopi * fc;
             T wa = 2 / t * tan(wd * t / 2);
             g = wa * t / 2;
             G = g / (1 + g);

@@ -3,6 +3,13 @@
 
 #include <cmath>
 
+//class Smoother {
+//public:
+//    void setSampleRate(float samplerate);
+//    void setTarget(float target);
+//    float getNextValue();
+//};
+
 // simple one-pole lowpass IIR filter.
 class OnePoleSmoother {
     float sr;

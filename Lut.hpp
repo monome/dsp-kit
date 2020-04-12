@@ -4,12 +4,22 @@ namespace dspkit {
     class Lut {
     public:
         // look up a value from a table with normalized position
-        // NB:
-        // - no bounds checking on position! must be in [0, 1] or you get garbage.
-        // - table should be "extended" with an extra duplicate or wrapped element as appropriate
+        // input position is clamped to [0,1]
         static T lookupLinear(float x, const T *tab, unsigned int size) {
-            const unsigned int size_2 = size - 2;
-            const float fidx = x * static_cast<float>(size_2);
+            float xclamp = std::fmin(1.f, std::fmax(x, 0.f));
+            const unsigned int size_1 = size - 1;
+            const float fidx = xclamp * static_cast<float>(size_1);
+            const auto idx = static_cast<unsigned int>(fidx);
+            const float a = tab[idx];
+            const float b = tab[idx + 1];
+            const float f = fidx - static_cast<float>(idx);
+            return a + (b - a) * f;
+        }
+        // variant without bounds checking, for speed.
+        // // **be careful with this**
+        static T lookupLinearNoClamp(float x, const T *tab, unsigned int size) {
+            const unsigned int size_1 = size - 1;
+            const float fidx = x * static_cast<float>(size_1);
             const auto idx = static_cast<unsigned int>(fidx);
             const float a = tab[idx];
             const float b = tab[idx + 1];
@@ -39,6 +49,22 @@ namespace dspkit {
             /// by memoizing transformations from `x` to idx/coeff
             const T a = Lut<T>::lookupLinear(x, tab0, N);
             const T b = Lut<T>::lookupLinear(x, tab1, N);
+            const float fy = fym - static_cast<float>(iym);
+            return a + fy*(b-a);
+
+        }
+        // variant without bounds checking, for speed when needed
+        // **be careful with this**
+        static T lookupLinearNoClamp(float x, float y, const T ** tab, unsigned int N, unsigned int M) {
+            const unsigned int M_2 = M-2;
+            const float fym = x * static_cast<float>(M-2);
+            const auto iym = static_cast<unsigned int>(fym);
+            const float tab0 = tab[iym];
+            const float tab1 = tab[iym+1];
+            // FIXME: small optimization is possible here,
+            /// by memoizing transformations from `x` to idx/coeff
+            const T a = Lut<T>::lookupLinearNoClamp(x, tab0, N);
+            const T b = Lut<T>::lookupLinearNoClamp(x, tab1, N);
             const float fy = fym - static_cast<float>(iym);
             return a + fy*(b-a);
 

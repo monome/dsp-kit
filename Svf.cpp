@@ -3,9 +3,11 @@
 
 #include "Lut.hpp"
 #include "Svf.hpp"
+#include "Constants.hpp"
 
 using dspkit::Svf;
 using dspkit::Lut;
+using dspkit::Constants;
 
 Svf::Svf() {
     clear();
@@ -40,7 +42,7 @@ void Svf::clear() {
 }
 
 void Svf::calcCoeffs() {
-    g = static_cast<float>(tan(M_PI * fc / sr));
+    g = static_cast<float>(tan(Constants::pi * fc / sr));
     calcSecondaryCoeffs();
 }
 

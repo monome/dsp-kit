@@ -7,6 +7,8 @@
 
 #include "Envelope.hpp"
 
+using namespace dspkit;
+
 Envelope::Envelope() {
     callback = nullptr;
     value = 0.f;
