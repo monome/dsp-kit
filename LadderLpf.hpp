@@ -32,7 +32,6 @@ namespace dspkit {
         void setQ(T q) {
             // assuming Q in (0, ~20]
             k = 4 * (q - 0.707) / (25 - 0.707);
-            std::cout << k << std::endl;
         }
 
         T stage(T x, T &z) {
