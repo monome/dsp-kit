@@ -81,7 +81,7 @@ void Envelope::go(float target, float time, easing::function shape) {
     inc = 1.f / denom;
     phase = 0.f;
 
-    std::cout << "going; start=" << value << "; end=" << target << "; scale=" << scale << "; inc = " << inc << std::endl;
+    //std::cout << "going; start=" << value << "; end=" << target << "; scale=" << scale << "; inc = " << inc << std::endl;
 
     moveState = MoveState::moving;
     if (shape == easing::function::none) {

@@ -125,7 +125,7 @@ namespace dspkit {
             env.go(target, time);
         }
         float getNextValue() {
-#if 0
+#if 1
             return lookupLevel(env.processSample());
 #else // testing...
             float pos = env.processSample();
