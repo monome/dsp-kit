@@ -9,38 +9,38 @@
 #include "Taper.hpp"
 
 namespace dspkit {
-
-    // zero-cost abstraction for smoothing functions
-    // (using Curiously Recurring Template Pattern)
-    // @param Imp: implementation class
-    // @param T: data type
-    template<typename Imp, typename T>
-    class Smoother {
-    public:
-        void setSampleRate(T sr) {
-            imp().setSampleRate(sr);
-        }
-        void setTime(float time) {
-            imp().setTime(time);
-        }
-        void setTarget(T target) {
-            imp().setTarget(target);
-        }
-        T getNextValue() {
-            return imp().getNextValue();
-        }
-        T getNextValue(T x) {
-            imp().setTarget(x);
-            return imp().getNextValue();
-        }
-
-    private:
-        Imp &imp() { return *static_cast<Imp*>(this); }
-    };
+//
+//    // zero-cost abstraction for smoothing functions
+//    // (using Curiously Recurring Template Pattern)
+//    // @param Imp: implementation class
+//    // @param T: data type
+//    template<typename Imp, typename T>
+//    class Smoother {
+//    public:
+//        void setSampleRate(T sr) {
+//            imp().setSampleRate(sr);
+//        }
+//        void setTime(float time) {
+//            imp().setTime(time);
+//        }
+//        void setTarget(T target) {
+//            imp().setTarget(target);
+//        }
+//        T getNextValue() {
+//            return imp().getNextValue();
+//        }
+//        T getNextValue(T x) {
+//            imp().setTarget(x);
+//            return imp().getNextValue();
+//        }
+//
+//    private:
+//        Imp &imp() { return *static_cast<Imp*>(this); }
+//    };
 
     // smoother using a one-pole lowpass filter
     template <typename T>
-    class OnePoleSmoother: public Smoother<OnePoleSmoother<T>, T> {
+    class OnePoleSmoother {
         T sr;
             T c;
             T x0;
@@ -51,6 +51,10 @@ namespace dspkit {
             void calcCoeff() {
                 c = expf(-6.9f / (t * sr));
             }
+//
+//            void smooth(T x) {
+//                return x + (x0 - x) * b;
+//            }
 
         public:
             void init(T samplerate, T time) {
@@ -75,7 +79,7 @@ namespace dspkit {
 
             // get new value without new input
             T getNextValue() {
-                y0 = smooth(x0, y0, c);
+                y0 = x0 + c * (y0 - x0);
                 return y0;
             }
 
@@ -103,7 +107,7 @@ namespace dspkit {
     // 0.5  -> -20db
     // 0.75 -> -10db
     // 1   - > 1
-    class AudioLevelSmoother: public Smoother<AudioLevelSmoother, float> {
+    class AudioLevelSmoother {
     private:
         Envelope env;
         float time;
@@ -144,7 +148,7 @@ namespace dspkit {
 
     // smoother which simply wraps an Envelope, without stage memory
     // FIXME: currently, Envelope only supports floats.
-    class EnvelopeSmoother: public Smoother<EnvelopeSmoother, float> {
+    class EnvelopeSmoother {
     private:
         Envelope env;
         float time;
