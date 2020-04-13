@@ -1,6 +1,6 @@
-#include "Taper.h"
+#include "Taper.hpp"
 
-using namespace crone;
+using namespace dspkit;
 
 const unsigned int Taper::Vu::ampPosTableSize = 32;
 

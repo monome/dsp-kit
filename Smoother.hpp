@@ -5,22 +5,25 @@
 #ifndef DSP_KIT_SMOOTHER_HPP
 #define DSP_KIT_SMOOTHER_HPP
 
-namespace dspkit{
+#include "Envelope.hpp"
+#include "Taper.hpp"
+
+namespace dspkit {
 
     // zero-cost abstraction for smoothing functions
     // (using Curiously Recurring Template Pattern)
     // @param Imp: implementation class
     // @param T: data type
-    template<typename Imp, typname T>
+    template<typename Imp, typename T>
     class Smoother {
     public:
-        setSampleRate(T sr) {
+        void setSampleRate(T sr) {
             imp().setSampleRate(sr);
         }
-        setTime(float time) {
+        void setTime(float time) {
             imp().setTime(time);
         }
-        setTarget(T target) {
+        void setTarget(T target) {
             imp().setTarget(target);
         }
         T getNextValue() {
@@ -38,15 +41,101 @@ namespace dspkit{
     // smoother using a one-pole lowpass filter
     template <typename T>
     class OnePoleSmoother: public Smoother<OnePoleSmoother<T>, T> {
+        T sr;
+            T c;
+            T x0;
+            T y0;
+            T t;
+
+        private:
+            void calcCoeff() {
+                c = expf(-6.9f / (t * sr));
+            }
+
+        public:
+            void init(T samplerate, T time) {
+                sr = samplerate;
+                t = time;
+                calcCoeff();
+            }
+
+            void setSampleRate(T samplerate) {
+                sr = samplerate;
+                calcCoeff();
+            }
+
+            void setTime(T time) {
+                t = time;
+                calcCoeff();
+            }
+
+            void setTarget(T x) {
+                x0 = x;
+            }
+
+            // get new value without new input
+            T getNextValue() {
+                y0 = smooth(x0, y0, c);
+                return y0;
+            }
+
+            // get new value with input
+            T getNextValue(T x) {
+                setTarget(x);
+                return getNextValue();
+            }
+
+            OnePoleSmoother() {
+                x0 = 0.f;
+                y0 = 0.f;
+                c = 0.f;
+                sr = 1.f;
+                t = 0.f;
+            }
 
     };
 
-    // smoother using an envelope and a table
-    template <typename T>
-    class TabSmoother: public Smoother<TabSmoother<T>, T> {
+
+    // smoother using an envelope and an audio taper
+    // note that the target values are given in terms of taper position:
+    // 0    -> 0
+    // 0.3  -> -30db
+    // 0.5  -> -20db
+    // 0.75 -> -10db
+    // 1   - > 1
+    class AudioLevelSmoother: public Smoother<AudioLevelSmoother, float> {
+    private:
+        Envelope env;
+        float time;
+        float target;
+    private:
+        static float lookupLevel(float pos) {
+            return Taper::LevelControl::getAmp(pos);
+        }
+    public:
+        void setSampleRate(T sr) {
+            env.setSampleRate(sr);
+        }
+        void setTime(float t) {
+            time = t;
+            env.go(target, time);
+        }
+        void setTarget(T val) {
+            target = val;
+            env.go(target, time);
+        }
+        T getNextValue() {
+            return lookupLevel(env.processSample());
+        }
+        T getNextValue(T x) {
+            setTarget(x);
+            return getNextValue();
+        }
 
     };
 
+    // smoother using an envelope and a generic table
+    // TODO
 
 };
 

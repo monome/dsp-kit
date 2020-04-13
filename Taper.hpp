@@ -2,9 +2,11 @@
 
 #include "Utilities.h"
 
-namespace crone {
+namespace dspkit {
     class Taper {
     public:
+
+        // low-resolution reverse audio taper for VU meters
         class Vu {
         private:
             static const float ampPosTable[];
@@ -18,6 +20,9 @@ namespace crone {
                 return LUT<float>::lookupLinear(amp, ampPosTable, ampPosTableSize);
             }
         };
+
+        // high-resolution audio taper for attenuation (0-1 amplitude.)
+        // (gain can simply be added later if needed)
         class LevelControl {
         private:
             static const float posAmpTable[];

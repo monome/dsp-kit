@@ -12,7 +12,7 @@ using namespace dspkit;
 Envelope::Envelope() {
     callback = nullptr;
     value = 0.f;
-    start=0.f;
+    start = 0.f;
     end = 0.f;
     inc = 0.f;
     scale = 0.f;
@@ -75,7 +75,7 @@ void Envelope::go(float target, float time, easing::function shape) {
     bool rising = target >= value;
     start = value;
     end = target;
-    scale = end-start;
+    scale = end - start;
     inc = 1.f / (time * sr);
     phase = 0.f;
 
