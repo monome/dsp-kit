@@ -179,6 +179,6 @@ namespace dspkit {
     // smoother using an envelope and a generic table
     // TODO
 
-};
+}
 
 #endif //DSP_KIT_SMOOTHER_HPP

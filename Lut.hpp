@@ -1,6 +1,8 @@
 #ifndef DSPKIT_LUT_HPP
 #define DSPKIT_LUT_HPP
 
+#include <cmath>
+
 namespace dspkit {
     // mega simple lookup table class
     template<typename T>
@@ -9,7 +11,7 @@ namespace dspkit {
         // look up a value from a table with normalized position
         // input position is clamped to [0,1]
         static T lookupLinear(float x, const T *tab, unsigned int size) {
-            float xclamp = std::fmin(1.f, std::fmax(x, 0.f));
+            const float xclamp = fmin(1.f, fmax(x, 0.f));
             const unsigned int size_1 = size - 1;
             const float fidx = xclamp * static_cast<float>(size_1);
             const auto idx = static_cast<unsigned int>(fidx);
@@ -44,15 +46,16 @@ namespace dspkit {
         // @param N: size of each row
         // @param M: number of rows
         static T lookupLinear(float x, float y, const T ** tab, unsigned int N, unsigned int M) {
-            const unsigned int M_2 = M-2;
-            const float fym = x * static_cast<float>(M-2);
+            const float xclamp = fmin(1.f, fmax(x, 0.f));
+            const float yclamp = fmin(1.f, fmax(y, 0.f));
+            const float fym = yclamp * static_cast<float>(M-2);
             const auto iym = static_cast<unsigned int>(fym);
             const float tab0 = tab[iym];
             const float tab1 = tab[iym+1];
             // FIXME: small optimization is possible here,
             /// by memoizing transformations from `x` to idx/coeff
-            const T a = Lut<T>::lookupLinear(x, tab0, N);
-            const T b = Lut<T>::lookupLinear(x, tab1, N);
+            const T a = Lut<T>::lookupLinear(xclamp, tab0, N);
+            const T b = Lut<T>::lookupLinear(xclamp, tab1, N);
             const float fy = fym - static_cast<float>(iym);
             return a + fy*(b-a);
 
@@ -60,8 +63,7 @@ namespace dspkit {
         // variant without bounds checking, for speed when needed
         // **be careful with this**
         static T lookupLinearNoClamp(float x, float y, const T ** tab, unsigned int N, unsigned int M) {
-            const unsigned int M_2 = M-2;
-            const float fym = x * static_cast<float>(M-2);
+            const float fym = y * static_cast<float>(M-2);
             const auto iym = static_cast<unsigned int>(fym);
             const float tab0 = tab[iym];
             const float tab1 = tab[iym+1];
