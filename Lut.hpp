@@ -1,3 +1,6 @@
+#ifndef DSPKIT_LUT_HPP
+#define DSPKIT_LUT_HPP
+
 namespace dspkit {
     // mega simple lookup table class
     template<typename T>
@@ -72,6 +75,6 @@ namespace dspkit {
         }
     };
 
-
-
 }
+
+#endif // DSPKIT_LUT_HPP

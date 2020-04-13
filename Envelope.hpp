@@ -14,6 +14,7 @@
 #include "Fifo.hpp"
 
 namespace dspkit {
+
     class Envelope {
 
     public:
@@ -42,6 +43,7 @@ namespace dspkit {
 
     public:
         Envelope();
+        Envelope(float sampleRate, float initialValue);
 
         // change the sample rate
         // (NB: this will only take effect on next stage or `execute`)

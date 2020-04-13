@@ -9,6 +9,7 @@
 
 using namespace dspkit;
 
+/// FIXME: should be template with data type parameter
 Envelope::Envelope() {
     callback = nullptr;
     value = 0.f;
@@ -95,6 +96,8 @@ void Envelope::updatePhase() {
     phase += inc;
     if (phase > 1.f) {
         phase = 1.f;
+        // NB: not this function's job to decide when to go to the next stage.
+        // if we end in the idle state, next sample update should advance/loop/stop.
         moveState = MoveState::idle;
         if (callback != nullptr) {
             callback(value);

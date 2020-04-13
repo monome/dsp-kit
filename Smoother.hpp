@@ -133,8 +133,48 @@ namespace dspkit {
             setTarget(x);
             return getNextValue();
         }
+    };
+
+
+    // smoother which simply wraps an Envelope, without stage memory
+    // FIXME: currently, Envelope only supports floats.
+    class EnvelopeSmoother: public Smoother<EnvelopeSmoother, float> {
+    private:
+        Envelope env;
+        float time;
+        float target;
+    public:
+        void setSampleRate(float sr) {
+            env.setSampleRate(sr);
+        }
+        void setTime(float t) {
+            time = t;
+            env.go(target, time);
+        }
+        void setTarget(float val) {
+            target = val;
+            env.go(target, time);
+        }
+
+        float getNextValue() {
+            return env.processSample();
+        }
+
+        float getNextValue(float x) {
+            setTarget(x);
+            return getNextValue();
+        }
+
+        void setRiseShape(easing::function shape) {
+            env.setRiseShape(shape);
+        }
+
+        void setFallShape(easing::function shape) {
+            env.setFallShape(shape);
+        }
 
     };
+
 
     // smoother using an envelope and a generic table
     // TODO
