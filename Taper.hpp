@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Utilities.h"
+//#include "Utilities.h"
+#include "Lut.hpp"
 
 namespace dspkit {
     class Taper {
@@ -17,7 +18,7 @@ namespace dspkit {
             static float getPos(float amp) {
                 // FIXME: should we return a special value for clipping?
                 if (amp > 1.f) { return 1.f; }
-                return LUT<float>::lookupLinear(amp, ampPosTable, ampPosTableSize);
+                return Lut<float>::lookupLinear(amp, ampPosTable, ampPosTableSize);
             }
         };
 
@@ -30,7 +31,7 @@ namespace dspkit {
         public:
             static float getAmp(float pos) {
                 if (pos > 1.f) { return 1.f; }
-                return LUT<float>::lookupLinear(pos, posAmpTable, posAmpTableSize);
+                return Lut<float>::lookupLinear(pos, posAmpTable, posAmpTableSize);
             }
         };
     };

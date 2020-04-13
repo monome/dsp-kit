@@ -113,21 +113,23 @@ namespace dspkit {
             return Taper::LevelControl::getAmp(pos);
         }
     public:
-        void setSampleRate(T sr) {
+        void setSampleRate(float sr) {
             env.setSampleRate(sr);
         }
         void setTime(float t) {
             time = t;
             env.go(target, time);
         }
-        void setTarget(T val) {
+        void setTarget(float val) {
             target = val;
             env.go(target, time);
         }
-        T getNextValue() {
+        float getNextValue() {
             return lookupLevel(env.processSample());
         }
-        T getNextValue(T x) {
+
+        // not used, but required by base template
+        float getNextValue(float x) {
             setTarget(x);
             return getNextValue();
         }
