@@ -2,7 +2,7 @@
 // Created by emb on 2/3/20.
 //
 
-#include <cassert>
+#include <cmath>
 #include <iostream>
 
 #include "Envelope.hpp"
@@ -10,7 +10,7 @@
 using namespace dspkit;
 
 /// FIXME: should be template with data type parameter
-Envelope::Envelope() {
+Envelope::Envelope() : sr(48000.f) {
     callback = nullptr;
     value = 0.f;
     start = 0.f;
@@ -77,10 +77,11 @@ void Envelope::go(float target, float time, easing::function shape) {
     start = value;
     end = target;
     scale = end - start;
-    inc = 1.f / (time * sr);
+    float denom = fmaxf(time*sr, 1.f/scale);
+    inc = 1.f / denom;
     phase = 0.f;
 
-    std::cout << "going; start=" << value << "; end=" << target << "; scale=" << scale << std::endl;
+    std::cout << "going; start=" << value << "; end=" << target << "; scale=" << scale << "; inc = " << inc << std::endl;
 
     moveState = MoveState::moving;
     if (shape == easing::function::none) {

@@ -31,7 +31,8 @@ namespace dspkit {
         public:
             static float getAmp(float pos) {
                 if (pos > 1.f) { return 1.f; }
-                return Lut<float>::lookupLinear(pos, posAmpTable, posAmpTableSize);
+                if (pos < 0.f) { return 0.f; }
+                return Lut<float>::lookupLinearNoClamp(pos, posAmpTable, posAmpTableSize);
             }
         };
     };

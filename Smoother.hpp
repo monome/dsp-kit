@@ -125,7 +125,13 @@ namespace dspkit {
             env.go(target, time);
         }
         float getNextValue() {
+#if 0
             return lookupLevel(env.processSample());
+#else // testing...
+            float pos = env.processSample();
+            float amp = lookupLevel(pos);
+            return amp;
+#endif
         }
 
         // not used, but required by base template
