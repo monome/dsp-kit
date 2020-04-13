@@ -15,7 +15,8 @@ namespace dspkit {
             const float f = fidx - static_cast<float>(idx);
             return a + (b - a) * f;
         }
-        // variant without bounds checking, for speed.
+
+        // variant without bounds checking, for speed when needed.
         // // **be careful with this**
         static T lookupLinearNoClamp(float x, const T *tab, unsigned int size) {
             const unsigned int size_1 = size - 1;

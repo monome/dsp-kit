@@ -223,7 +223,7 @@ namespace dspkit {
             for (size_t fr = 0; fr < numFrames; ++fr) {
                 x = a.buf[0][fr];
                 l = this->levelSmoother.getNextValue();
-                c = panSmoother.getNextValue
+                c = panSmoother.getNextValue();
                 this->buf[0][fr] += x * l * (1.f - c);
                 this->buf[1][fr] += x * l * c;
             }
@@ -237,8 +237,7 @@ namespace dspkit {
             for (size_t fr = 0; fr < numFrames; ++fr) {
                 x = a.buf[0][fr];
                 l = this->levelSmoother.getNextValue();
-                // FIXME
-                //c = pan.update();
+                c = panSmoother.getNextValue();
                 c *= (float) M_PI_2;
                 this->buf[0][fr] += x * l * cosf(c);
                 this->buf[1][fr] += x * l * sinf(c);
