@@ -110,8 +110,8 @@ namespace dspkit {
     class AudioLevelSmoother {
     private:
         Envelope env;
-        float time;
-        float target;
+        float time {};
+        float target {};
     private:
         static float lookupLevel(float pos) {
             return Taper::LevelControl::getAmp(pos);
@@ -151,8 +151,8 @@ namespace dspkit {
     class EnvelopeSmoother {
     private:
         Envelope env;
-        float time;
-        float target;
+        float time {1};
+        float target {0};
     public:
         void setSampleRate(float sr) {
             env.setSampleRate(sr);

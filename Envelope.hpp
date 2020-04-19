@@ -96,7 +96,7 @@ namespace dspkit {
         std::function<float(float)> shapeFunc; // current easing function
         std::function<void(float)> callback; // current callback function
 
-        float phase; // current phase in [0,1]
+        float phase{}; // current phase in [0,1]
         float value; // current output value
         float start;   // start point, for scaling
         float end;   // end point, for scaling

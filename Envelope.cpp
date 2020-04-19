@@ -17,20 +17,27 @@ Envelope::Envelope() : sr(48000.f) {
     end = 0.f;
     inc = 0.f;
     scale = 0.f;
+    riseShape = easing::function::linear;
+    fallShape = easing::function::linear;
+    sequenceMode = SequenceMode::queue;
     moveState = MoveState::idle;
 }
 
-void Envelope::setSampleRate(float sr) {
-    this->sr = sr;
+void Envelope::setSampleRate(float _sr) {
+    this->sr = _sr;
 }
 
 float Envelope::processSample() {
     if (moveState == MoveState::moving) {
-        updateValue();
         updatePhase();
+        updateValue();
     } else {
         if (stageQ.size() > 0) {
             nextStage();
+            if (moveState == MoveState::moving) {
+                updatePhase();
+                updateValue();
+            }
         }
     }
     return value;
