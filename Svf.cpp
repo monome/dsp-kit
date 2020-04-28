@@ -13,8 +13,8 @@ Svf::Svf() {
     clear();
 }
 
-void Svf::initPitchTable(double sr, double baseFreq, double numOct) {
-    this->sr = static_cast<float>(sr);
+void Svf::initPitchTable(double sr_, double baseFreq, double numOct) {
+    setSampleRate(static_cast<float>(sr_));
     auto sz_1 = gTabSize -1;
     // base-2 logarithmic pitch increment per entry
     double inc = numOct / static_cast<double>(sz_1);
@@ -68,18 +68,27 @@ void Svf::update(float in) {
 }
 
 
-void Svf::setSampleRate(float sr) {
-    this->sr = sr;
+void Svf::setSampleRate(float sr_) {
+    this->sr = sr_;
+    this->sr_2 = sr * 0.5f;
     calcCoeffs();
 }
 
-void Svf::setCutoff(float fc) {
-    this->fc = (fc > sr/2) ? sr/2 : fc;
+void Svf::setCutoffNoCalc(float fc_) {
+    this->fc = fc_;
+}
+
+void Svf::setInverseQNoCalc(float rq_) {
+    this->rq = rq_;
+}
+
+void Svf::setCutoff(float fc_) {
+    setCutoffNoCalc(fc_);
     calcCoeffs();
 }
 
-void Svf::setInverseQ(float rq) {
-    this->rq = rq;
+void Svf::setInverseQ(float rq_) {
+    setInverseQNoCalc(rq_);
     calcSecondaryCoeffs();
 }
 

@@ -30,17 +30,22 @@ namespace dspkit {
         void setSampleRate(float sr);
         void setCutoff(float fc);
         void setInverseQ(float rq);
+        void setCutoffNoCalc(float fc);
+        void setInverseQNoCalc(float rq);
         void setLpMix(float mix);
         void setHpMix(float mix);
         void setBpMix(float mix);
         void setBrMix(float mix);
 
-    private:
-        void update(float x);
         // recalculate all coefficients for current fc, sr, rq
         void calcCoeffs();
+
         // recalculate cheaper conefficients for RQ only (no `tan`)
         void calcSecondaryCoeffs();
+
+    private:
+        // calculate new outputs from input
+        void update(float x);
 
     private:
         static constexpr size_t gTabSize = 1024;
@@ -49,6 +54,7 @@ namespace dspkit {
 
         // sample rate
         float sr;
+        float sr_2;
         // corner frequency in hz
         float fc;
         // reciprocal of Q in [0,1]
