@@ -56,13 +56,13 @@ namespace dspkit {
         float processSample();
 
         // set the default shape for rising segments
-        float setRiseShape(easing::function shape = easing::function::linear);
+        void setRiseShape(easing::function shape = easing::function::linear);
 
         // set the default shape for falling segments
-        float setFallShape(easing::function shape = easing::function::linear);
+        void setFallShape(easing::function shape = easing::function::linear);
 
         // set callback function
-        float setCallback(std::function<void(float)> fn);
+        void setCallback(std::function<void(float)> fn);
 
         // immediately execute a movement with given stage data.
         // if a stage is currently being executed, this will pivot from the current value

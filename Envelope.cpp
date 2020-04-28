@@ -117,11 +117,11 @@ void Envelope::setSequenceMode(Envelope::SequenceMode mode) {
     sequenceMode = mode;
 }
 
-float Envelope::setRiseShape(easing::function shape) {
+void Envelope::setRiseShape(easing::function shape) {
     riseShape = shape;
 }
 
-float Envelope::setFallShape(easing::function shape) {
+void Envelope::setFallShape(easing::function shape) {
     fallShape = shape;
 }
 
@@ -131,6 +131,6 @@ void Envelope::setValue(float val) {
     moveState = MoveState::idle;
 }
 
-float Envelope::setCallback(std::function<void(float)> fn) {
+void Envelope::setCallback(std::function<void(float)> fn) {
     callback = fn;
 }
