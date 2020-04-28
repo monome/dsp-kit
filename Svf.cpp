@@ -20,7 +20,7 @@ void Svf::initPitchTable(double sr, double baseFreq, double numOct) {
     double inc = numOct / static_cast<double>(sz_1);
     double exp = 0.0;
     double f;
-    for (int i = 0; i < sz_1; ++i) {
+    for (unsigned int i = 0; i < sz_1; ++i) {
         f = baseFreq * pow(2.0, exp);
         // std::cout << f << std::endl;
         exp += inc;

@@ -668,7 +668,7 @@ namespace easing {
             case easing::function::none:
                 assert(false);
         }
-	return easing::function::linear;
+	return easing::linear<T>;
     }
 
 
