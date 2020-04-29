@@ -10,6 +10,7 @@
 #include <cmath>
 #include <string>
 #include <cassert>
+#include <functional>
 
 namespace easing {
 

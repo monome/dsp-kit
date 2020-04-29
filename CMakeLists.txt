@@ -11,9 +11,6 @@ add_executable(test-fifo
         test/test-fifo.cpp
         Fifo.hpp)
 
-#add_executable(test-smoothing
-#        test/test-smoothing.cpp)
-
 add_executable(test-envelope
         test/test-envelope.cpp
         Envelope.cpp
@@ -43,5 +40,8 @@ add_executable(test-fast-fader
 add_executable(test-fast-mover
         test/test-fast-mover.cpp
         FastMover.cpp)
+
+add_executable(gen-easing-tables
+        workbench/gen_easing_tables.cpp)
 
 add_subdirectory(noise)

@@ -76,7 +76,6 @@ def shaper_bram(x, a):
     ax = np.abs(x)
     return x * (ax + a) / (x * x + (a - 1) * ax + 1)
 
-
 def shaper_bram2(x, a):
     ax = np.abs(x)
     sx = np.sign(x)
@@ -118,7 +117,7 @@ def shaper_tanh(x, a):
     x = x * (2 ** a)
     return np.tanh(x)
 
-
+# including to show useful ranges
 test_shaper(shaper_bram, [1, 2, 3, 5, 7, 8, 9, 10])
 test_shaper(shaper_bram2, [0.999, 0.8, 0.7, 0.5, 0.3, 0.15, 0.05, 0.001])
 test_shaper(shaper_tsq, [0.9, 0.8, 0.7, 0.5, 0.3, 0.2, 0.1, 0.001], 1)
