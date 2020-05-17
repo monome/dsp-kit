@@ -14,6 +14,8 @@
 #include <limits>
 #include <cmath>
 
+#include "clamp.hpp"
+
 namespace dspkit {
 
     class FastMover {
@@ -45,8 +47,12 @@ namespace dspkit {
         bool moving{};
 
         void move() {
+#if 0
             float newPos = fCurPos + inc;
             fCurPos = newPos < posMax ? newPos : posMax;
+#else
+            fCurPos = inc_clamp_hi(fCurPos, inc, posMax);
+#endif
             iCurPos = (int) fCurPos;
             moving = (iCurPos < tableSize);
             curVal = start + scale * curTable[iCurPos];

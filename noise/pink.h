@@ -4,7 +4,7 @@
 // adapted from code by phil burke
 // www.firstpr.com.au/dsp/pink-noise/phil_burk_19990905_patest_pink.c
 //
-// implementation of algorithm by Voss / Gardne,
+// implementation of algorithm by Voss / Gardner,
 // with further optimizations by James McCartney
 //
 // further reference:

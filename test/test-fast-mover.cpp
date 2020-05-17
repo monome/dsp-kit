@@ -8,7 +8,9 @@
 #include "FastMover.hpp"
 using namespace dspkit;
 
-FastMover fm;
+#define SKIP_OUTPUT true
+
+FastMover   fm;
 std::ofstream fs;
 
 constexpr unsigned long int nsamps = 200000;
@@ -17,8 +19,11 @@ unsigned long int count = 0;
 
 void beginOutput(const std::string &path) {
     count = 0;
+#if SKIP_OUTPUT
+#else
     fs.open(path);
     fs << path << std::endl;
+#endif
 }
 
 void process(int n) {
@@ -30,10 +35,13 @@ void process(int n) {
 }
 
 void finishOutput() {
+#if SKIP_OUTPUT
+#else
     for (unsigned long int i=0; i<count; ++i) {
         fs << buf[i]<< std::endl;
     }
     fs.close();
+#endif
 }
 
 void testShape(int shapeIndex) {
@@ -73,10 +81,9 @@ void testShape(int shapeIndex) {
 
     auto end = high_resolution_clock::now();
     auto dur = duration_cast<microseconds>(end - start);
-    std::cout << "usecs: " << dur.count() << std::endl;
+    std::cout << dur.count() << std::endl;
 
     finishOutput();
-;
 }
 
 
