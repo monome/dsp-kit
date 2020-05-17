@@ -4,6 +4,7 @@
 #include "Lut.hpp"
 #include "Svf.hpp"
 #include "Constants.hpp"
+#include "Conversion.hpp"
 
 using dspkit::Svf;
 using dspkit::Lut;
@@ -13,18 +14,15 @@ Svf::Svf() {
     clear();
 }
 
-void Svf::initPitchTable(double sr_, double baseFreq, double numOct) {
-    setSampleRate(static_cast<float>(sr_));
+// pitch table maps [0, 1] to midi [0, 127]
+void Svf::initPitchTable(double sr_) {
     auto sz_1 = gTabSize -1;
-    // base-2 logarithmic pitch increment per entry
-    double inc = numOct / static_cast<double>(sz_1);
-    double exp = 0.0;
-    double f;
+    double x = 0.0;
+    double inc = 127.0 / sz_1;
     for (unsigned int i = 0; i < sz_1; ++i) {
-        f = baseFreq * pow(2.0, exp);
-        // std::cout << f << std::endl;
-        exp += inc;
-        gTab[i] = static_cast<float>(tan(M_PI * f / sr));
+        x += inc;
+        double hz = Conversion<double>::midihz(x);
+        gTab[i] = static_cast<float>(tan(M_PI * hz / sr_));
     }
     // extra element for "extended" lookup
     gTab[sz_1] = gTab[sz_1 - 1];
@@ -42,7 +40,7 @@ void Svf::clear() {
 }
 
 void Svf::calcCoeffs() {
-    g = static_cast<float>(tan(Constants::pi * fc / sr));
+    g = getG(sr, fc);
     calcSecondaryCoeffs();
 }
 
@@ -114,4 +112,8 @@ void Svf::calcSecondaryCoeffs() {
     g2 = 2.f * (g + rq) * g1;
     g3 = g * g1;
     g4 = 2.f * g1;
+}
+
+float Svf::getG(float sr, float fc) {
+    return static_cast<float>(tan(Constants::pi * fc / sr));
 }

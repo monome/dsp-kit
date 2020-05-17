@@ -14,7 +14,7 @@ namespace dspkit {
         // @param sr: sample rate
         // @param baseFreq: base frequency (pitch == 0)
         // @param numOct: how many octaves to compute above base frequency
-        void initPitchTable(double sr, double baseFreq = 14.1, double numOct = 10.f);
+        void initPitchTable(double sr);
 
         // clear the internal filter state
         void clear();
@@ -40,6 +40,9 @@ namespace dspkit {
         // recalculate all coefficients for current fc, sr, rq
         void calcCoeffs();
 
+        // calculate and return main coefficient given FC, SR, RQ
+        static float getG(float sr, float fc);
+
         // recalculate cheaper conefficients for RQ only (no `tan`)
         void calcSecondaryCoeffs();
 
@@ -50,39 +53,39 @@ namespace dspkit {
     private:
         static constexpr size_t gTabSize = 1024;
         // lookup table for primary coefficient (pitch-wise)
-        std::array<float, gTabSize> gTab;
+        std::array<float, gTabSize> gTab{};
 
         // sample rate
-        float sr;
-        float sr_2;
+        float sr{};
+        float sr_2{};
         // corner frequency in hz
-        float fc;
+        float fc{};
         // reciprocal of Q in [0,1]
-        float rq;
+        float rq{};
         // intermediate coefficients
-        float g;
-        float g1;
-        float g2;
-        float g3;
-        float g4;
+        float g{};
+        float g1{};
+        float g2{};
+        float g3{};
+        float g4{};
         // state variables
-        float v0;
-        float v1;
-        float v2;
-        float v0z;
-        float v1z;
-        float v2z;
-        float v3;
+        float v0{};
+        float v1{};
+        float v2{};
+        float v0z{};
+        float v1z{};
+        float v2z{};
+        float v3{};
         // outputs
-        float lp; // lowpass
-        float hp; // highpass
-        float bp; // bandpass
-        float br; // bandreject
+        float lp{}; // lowpass
+        float hp{}; // highpass
+        float bp{}; // bandpass
+        float br{}; // bandreject
         // mix
-        float lpMix;
-        float hpMix;
-        float bpMix;
-        float brMix;
+        float lpMix{};
+        float hpMix{};
+        float bpMix{};
+        float brMix{};
     };
 }
 
