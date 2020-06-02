@@ -5,7 +5,8 @@
 #include "FastMover.hpp"
 
 using dspkit::FastMover;
-const float FastMover::shapeTables[FastMover::numTables][FastMover::tableSize] = {
+
+const float FastMover::defaultShapeTables[FastMover::numTables][FastMover::tableSize] = {
     {
 #include "inc/easing_linear.inc"
     },

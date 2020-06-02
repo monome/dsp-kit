@@ -11,7 +11,7 @@ namespace dspkit {
         // look up a value from a table with normalized position
         // input position is clamped to [0,1]
         static T lookupLinear(float x, const T *tab, unsigned int size) {
-            const float xclamp = clamp<float>(x, 0.f, 1.f);
+            const auto xclamp = clamp<float>(x, 0.f, 1.f);
             const unsigned int size_1 = size - 1;
             const float fidx = xclamp * static_cast<float>(size_1);
             const auto idx = static_cast<unsigned int>(fidx);
@@ -46,8 +46,8 @@ namespace dspkit {
         // @param N: size of each row
         // @param M: number of rows
         static T lookupLinear(float x, float y, const T ** tab, unsigned int N, unsigned int M) {
-            const float xclamp = clamp<float>(x, 0.f, 1.f);
-            const float yclamp = clamp<float>(y, 0.f, 1.f);
+            const auto xclamp = clamp<float>(x, 0.f, 1.f);
+            const auto yclamp = clamp<float>(y, 0.f, 1.f);
             const float fym = yclamp * static_cast<float>(M-2);
             const auto iym = static_cast<unsigned int>(fym);
             const float tab0 = tab[iym];

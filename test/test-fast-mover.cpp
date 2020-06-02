@@ -53,7 +53,6 @@ void testShape(int shapeIndex) {
 
     auto start = high_resolution_clock::now();
 
-
     fm.setRiseShape(shapeIndex);
     fm.setFallShape(shapeIndex);
     fm.setSampleRate(48000);
@@ -68,15 +67,15 @@ void testShape(int shapeIndex) {
     fm.setTarget(0);
     process(24000);
     // immediate jump
-    fm.setTime(0.0);
-    fm.setTarget(-100);
+//    fm.setTime(0.0);
+//    fm.setTarget(-100);
     // aborted rise
     fm.setTime(1.0);
-    fm.setTarget(0.0);
+    fm.setTarget(100.0);
     process(24000);
     // aborted fall
     fm.setTime(1.0);
-    fm.setTarget(-100.0);
+    fm.setTarget(0);
     process(24000);
 
     auto end = high_resolution_clock::now();
@@ -88,8 +87,11 @@ void testShape(int shapeIndex) {
 
 
 int main() {
-    for (int i=0; i<(int)easing::function::enum_count; ++i) {
-        testShape(i);
+    int nruns = 4000;
+    for (int j=0; j<nruns; ++j) {
+        for (int i = 0; i < (int) easing::function::enum_count; ++i) {
+            testShape(i);
+        }
     }
 }
 

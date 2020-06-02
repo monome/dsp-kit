@@ -1,3 +1,5 @@
+#ifndef DSPKIT_DC_BLOCKER_HPP
+#define DSPKIT_DC_BLOCKER_HPP
 // 1-pole, 1-zero highpass, suitable for cheap DC blocking
 
 namespace dspkit {
@@ -27,3 +29,5 @@ namespace dspkit {
         }
     };
 }
+
+#endif // DSPKIT_DC_BLOCKER_HPP

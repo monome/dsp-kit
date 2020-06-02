@@ -2,8 +2,8 @@
 // Created by emb on 11/19/18.
 //
 
-#ifndef CRONE_BUS_H
-#define CRONE_BUS_H
+#ifndef DSPKIT_BUS_H
+#define DSPKIT_BUS_H
 
 #include "dsp-kit/Smoother.hpp"
 
@@ -223,4 +223,4 @@ namespace dspkit {
 
 }
 
-#endif //CRONE_BUS_H
+#endif //DSPKIT_BUS_H

@@ -4,7 +4,7 @@
 // a pinking filter
 //
 // based on code by Paul Kellet from musicdsp.org
-// (lost to time...)
+// (link is, alas, lost to time...)
 
 #ifndef DSP_KIT_PINKER_HPP
 #define DSP_KIT_PINKER_HPP

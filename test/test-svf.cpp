@@ -49,7 +49,7 @@ static void fillSignalBufferNoise() {
 
 void processPitchMod() {
     for (int fr = 0; fr < numFrames; ++fr) {
-        svf.setFcPitch(pitchBuf[fr]);
+        svf.setCutoffPitch(pitchBuf[fr]);
         sndBuf[fr] = svf.processSample(sndBuf[fr]);
     }
 }

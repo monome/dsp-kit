@@ -1,4 +1,5 @@
 #include <cmath>
+#include <boost/assert.hpp>
 //#include <iostream>
 
 #include "Lut.hpp"
@@ -10,27 +11,8 @@ using dspkit::Svf;
 using dspkit::Lut;
 using dspkit::Constants;
 
-Svf::Svf() {
+Svf::Svf() : gTable(nullptr) {
     clear();
-}
-
-// pitch table maps [0, 1] to midi [0, 127]
-void Svf::initPitchTable(double sr_) {
-    auto sz_1 = gTabSize -1;
-    double x = 0.0;
-    double inc = 127.0 / sz_1;
-    for (unsigned int i = 0; i < sz_1; ++i) {
-        x += inc;
-        double hz = Conversion<double>::midihz(x);
-        gTab[i] = static_cast<float>(tan(M_PI * hz / sr_));
-    }
-    // extra element for "extended" lookup
-    gTab[sz_1] = gTab[sz_1 - 1];
-}
-
-void Svf::setCutoffPitch(float pitch) {
-    this->g = Lut<float>::lookupLinear(pitch, gTab.data(), gTabSize);
-    calcSecondaryCoeffs();
 }
 
 void Svf::clear() {
@@ -68,7 +50,6 @@ void Svf::update(float in) {
 
 void Svf::setSampleRate(float sr_) {
     this->sr = sr_;
-    this->sr_2 = sr * 0.5f;
     calcCoeffs();
 }
 
@@ -109,11 +90,37 @@ void Svf::setBrMix(float mix) {
 // calculate only secondary coefficients, given primary (e.g. from LUT)
 void Svf::calcSecondaryCoeffs() {
     g1 = g / (1.f + g * (g + rq));
-    g2 = 2.f * (g + rq) * g1;
     g3 = g * g1;
     g4 = 2.f * g1;
+    g2 = (g + rq) * g4;
 }
 
 float Svf::getG(float sr, float fc) {
     return static_cast<float>(tan(Constants::pi * fc / sr));
+}
+
+void Svf::setG(float x) {
+    this->g = x;
+}
+
+void Svf::setGTable(const float *gainTable, int tableSize) {
+    this->gTable = gainTable;
+    gTableSize = tableSize;
+}
+
+void Svf::fillGTable(float* table, int size, float sampleRate, float midiMin, float midiMax) {
+    double x = midiMin;
+    double inc = 1.0 / size;
+    for (int pos=0; pos<size; ++pos) {
+        double midi = x * (midiMax - midiMin) + midiMin;
+        double hz = Conversion<double>::midihz(midi);
+        table[pos] = Svf::getG((float) sampleRate, (float) hz);
+        x += inc;
+    }
+}
+
+// assumption: gain table is not null
+void Svf::setCutoffPitchNoCalc(float pitch) {
+    assert(this->gTable != nullptr);
+    setG(Lut<float>::lookupLinear(pitch, gTable, gTableSize));
 }

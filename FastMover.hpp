@@ -13,18 +13,23 @@
 
 #include <limits>
 #include <cmath>
+#include <functional>
 
 #include "clamp.hpp"
 
 namespace dspkit {
 
     class FastMover {
-    private:
+    public:
+        static constexpr int numTables = 31;
         static constexpr int tableSize = 4097;
+        typedef const float (*TableData)[tableSize];
+
+    private:
         static constexpr int tableSize_1 = tableSize - 1;
         static constexpr float posMax = static_cast<float>(tableSize_1);
-        static constexpr int numTables = 31;
-        static const float shapeTables[numTables][tableSize];
+        static const float defaultShapeTables[numTables][tableSize];
+        TableData shapeTables;
 
         float sr{};
         float time{};
@@ -54,15 +59,17 @@ namespace dspkit {
             fCurPos = inc_clamp_hi(fCurPos, inc, posMax);
 #endif
             iCurPos = (int) fCurPos;
-            moving = (iCurPos < tableSize);
+            moving = (iCurPos < tableSize); // <- FIXME: should be tablesize - 1 i guess
             curVal = start + scale * curTable[iCurPos];
         }
 
     public:
-        FastMover() {
+        explicit FastMover(TableData tableData = nullptr) {
+            shapeTables = (tableData == nullptr) ? defaultShapeTables : tableData;
             riseTable = shapeTables[0];
             fallTable = shapeTables[0];
         }
+
         void setSampleRate(float sr_) {
             sr = sr_;
         }
@@ -99,11 +106,26 @@ namespace dspkit {
             fallTable = shapeTables[shapeTableIndex];
         }
 
+        void update() {
+            if (moving) {
+                move();
+            }
+        }
+
         float getNextValue() {
-            if (moving) { move(); }
+            update();
             return curVal;
         }
 
+    public:
+        // helper: initialize a set of table data using a transform function on the default tables.
+        static void initTableData(float (*data)[tableSize], const std::function<float(float)> &transform) {
+            for (int tab = 0; tab < numTables; ++tab) {
+                for (int pos = 0; pos < tableSize; ++pos) {
+                    data[tab][pos] = transform(defaultShapeTables[tab][pos]);
+                }
+            }
+        }
     };
 }
 

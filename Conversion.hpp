@@ -2,8 +2,8 @@
 // Created by emb on 5/16/20.
 //
 
-#ifndef CRONE_CONVERSION_HPP
-#define CRONE_CONVERSION_HPP
+#ifndef DSPKIT_CONVERSION_HPP
+#define DSPKIT_CONVERSION_HPP
 
 namespace dspkit {
     template<typename T>
@@ -24,4 +24,4 @@ namespace dspkit {
     };
 }
 
-#endif //CRONE_CONVERSION_HPP
+#endif //DSPKIT_CONVERSION_HPP

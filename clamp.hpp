@@ -2,8 +2,8 @@
 // Created by emb on 5/17/20.
 //
 
-#ifndef CRONE_CLAMP_HPP
-#define CRONE_CLAMP_HPP
+#ifndef DSPKIT_CLAMP_HPP
+#define DSPKIT_CLAMP_HPP
 
 namespace dspkit {
     template<typename T>
@@ -41,4 +41,4 @@ namespace dspkit {
     }
 
 }
-#endif //CRONE_CLAMP_HPP
+#endif //DSPKIT_CLAMP_HPP
