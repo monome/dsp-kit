@@ -3,8 +3,9 @@
 ///	@copyright	Copyright 2018 The Min-Lib Authors. All rights reserved.
 ///	@copyright	Copyright 2020 ezra buchla, small adaptations. All wrongs reversed.
 ///	@license	Use of this source code is governed by the MIT License found in the License.md file.
+#ifndef _DSPKIT_EASING_H_
+#define _DSPKIT_EASING_H_
 
-#pragma once
 
 #include <algorithm>
 #include <cmath>
@@ -672,5 +673,10 @@ namespace easing {
 	return easing::linear<T>;
     }
 
+    //int getNumShapes() { return (int)function::enum_count; }
 
-}    // namespace c74::min::lib::easing
+
+}    // namespace easing
+
+
+#endif

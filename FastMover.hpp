@@ -14,82 +14,91 @@
 #include <limits>
 #include <cmath>
 
-namespace dspkit { 
+namespace dspkit {
 
-class FastMover {
-private:
-    static constexpr int tableSize = 1025;
-    static constexpr int tableSize_1 = 1024;
-    static constexpr float posMax = static_cast<float>(tableSize) - std::numeric_limits<float>::epsilon() ;
-    static constexpr int numTables = 31;
+    class FastMover {
+    private:
+        static constexpr int tableSize = 4097;
+        static constexpr int tableSize_1 = tableSize - 1;
+        static constexpr float posMax = static_cast<float>(tableSize_1);
+        static constexpr int numTables = 31;
+        static const float shapeTables[numTables][tableSize];
 
-    static const float shapeTables[numTables][tableSize];
+        float sr{};
+        float time{};
+        float inc{};
 
-    float sr;
-    float time;
-    float inc;
+        // current segment definition
+        float start{};
+        float end{};
+        float scale{};
 
-    // current segment definition
-    float start;
-    float end;
-    float scale;
+        // current position as fractional table index
+        float fCurPos{};
+        int iCurPos{};
+        float curVal{};
 
-    // current position as fractional table index
-    float fCurPos;
-    int iCurPos;
-    float curVal;
+        const float *curTable{};
+        const float *riseTable;
+        const float *fallTable;
 
-    const float *curTable;
-    const float *riseTable;
-    const float *fallTable;
+        bool moving{};
 
-    bool moving;
+        void move() {
+            float newPos = fCurPos + inc;
+            fCurPos = newPos < posMax ? newPos : posMax;
+            iCurPos = (int) fCurPos;
+            moving = (iCurPos < tableSize);
+            curVal = start + scale * curTable[iCurPos];
+        }
 
-    void move() {
-        fCurPos = std::fmin(posMax, fCurPos + inc);
-        iCurPos = (int)fCurPos;
-        moving = (iCurPos == tableSize_1);
-        curVal = start + scale * curTable[iCurPos];
-    }
+    public:
+        FastMover() {
+            riseTable = shapeTables[0];
+            fallTable = shapeTables[0];
+        }
+        void setSampleRate(float sr_) {
+            sr = sr_;
+        }
 
-public:
-    void setSampleRate(float sr_) {
-        sr = sr_;
-    }
+        void setTime(float t) {
+            time = t;
+            inc = (float) tableSize / (time * sr);
+        }
 
-    void setTime(float t) {
-        time = t;
-        inc = (float)tableSize / (time * sr);
-    }
+        void setValue(float val) {
+            curVal = val;
+            moving = false;
+        }
 
-    void setValue(float val) {
-        curVal = val;
-        moving = false;
-    }
+        void setTarget(float target) {
+            if (time <= std::numeric_limits<float>::epsilon()) {
+                setValue(target);
+            } else {
+                start = curVal;
+                end = target;
+                scale = end - start;
+                curTable = end > start ? riseTable : fallTable;
+                fCurPos = 0.f;
+                iCurPos = 0;
+                moving = true;
+            }
+        }
 
-    void setTarget(float target) {
-        start = curVal;
-        end = target;
-        scale = end - start;
-        curTable = end > start ? riseTable : fallTable;
-        fCurPos = 0.f;
-        iCurPos = 0;
-        moving = true;
-    }
+        void setRiseShape(int shapeTableIndex) {
+            riseTable = shapeTables[shapeTableIndex];
+        }
 
-    void setRiseShape(int shapeTableIndex) {
-        riseTable = shapeTables[shapeTableIndex];
-    }
+        void setFallShape(int shapeTableIndex) {
+            fallTable = shapeTables[shapeTableIndex];
+        }
 
-    void setFallShape(int shapeTableIndex) {
-        fallTable = shapeTables[shapeTableIndex];
-    }
+        float getNextValue() {
+            if (moving) { move(); }
+            return curVal;
+        }
 
-    float next() {
-        if (moving) { move(); }
-        return curVal;
-    }};
-
+    };
 }
 
 #endif //CRONE_FASTMOVER_HPP
