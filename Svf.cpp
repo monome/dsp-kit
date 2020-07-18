@@ -109,7 +109,7 @@ void Svf::setGTable(const float *gainTable, int tableSize) {
 }
 
 void Svf::fillGTable(float* table, int size, float sampleRate, float midiMin, float midiMax) {
-    double x = midiMin;
+    double x = 0;
     double inc = 1.0 / size;
     for (int pos=0; pos<size; ++pos) {
         double midi = x * (midiMax - midiMin) + midiMin;

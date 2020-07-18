@@ -6,6 +6,7 @@
 
 namespace dspkit {
 
+    // low-level 2nd-order SVF
     class Svf {
     public:
         // c-tor / d-tor
@@ -88,7 +89,7 @@ namespace dspkit {
         float hpMix{};
         float bpMix{};
         float brMix{};
-        // table mapping gain coefficients to pitch
+        // table mapping pitch to gain coefficients
         const float *gTable;
         int gTableSize;
     };
