@@ -46,7 +46,7 @@ namespace dspkit {
         void calcCoeffs();
 
         // calculate and return main coefficient given FC, SR, RQ
-        static float getG(float sr, float fc);
+        static float calcG(float sr, float fc);
         // set main coefficient directly
         void setG(float g);
 

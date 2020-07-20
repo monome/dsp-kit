@@ -1,6 +1,5 @@
 #include <cmath>
 #include <boost/assert.hpp>
-//#include <iostream>
 
 #include "Lut.hpp"
 #include "Svf.hpp"
@@ -22,7 +21,7 @@ void Svf::clear() {
 }
 
 void Svf::calcCoeffs() {
-    g = getG(sr, fc);
+    setG(calcG(sr, fc));
     calcSecondaryCoeffs();
 }
 
@@ -95,12 +94,12 @@ void Svf::calcSecondaryCoeffs() {
     g2 = (g + rq) * g4;
 }
 
-float Svf::getG(float sr, float fc) {
+float Svf::calcG(float sr, float fc) {
     return static_cast<float>(tan(Constants::pi * fc / sr));
 }
 
-void Svf::setG(float x) {
-    this->g = x;
+void Svf::setG(float x) {;
+    this->g = x  > 1.f ? 1.f : x;
 }
 
 void Svf::setGTable(const float *gainTable, int tableSize) {
@@ -114,7 +113,8 @@ void Svf::fillGTable(float* table, int size, float sampleRate, float midiMin, fl
     for (int pos=0; pos<size; ++pos) {
         double midi = x * (midiMax - midiMin) + midiMin;
         double hz = Conversion<double>::midihz(midi);
-        table[pos] = Svf::getG((float) sampleRate, (float) hz);
+        double g  = Svf::calcG((float) sampleRate, (float) hz);
+        table[pos] = static_cast<float>(g);
         x += inc;
     }
 }
