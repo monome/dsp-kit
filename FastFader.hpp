@@ -8,7 +8,11 @@ namespace dspkit {
     class FastFader {
     private:
         static constexpr int tableSize = 1025;
-        static constexpr float posMax = static_cast<float>(tableSize) - std::numeric_limits<float>::epsilon() ;
+        // FIXME: was attempting to create a float value such that:
+        // - casting to int results in (tableSize - 1)
+        // - maximum value is as close as possible to (tableSize).
+        // 2nd condition proving difficult
+        static constexpr float posMax = static_cast<float>(tableSize) - 1 + 0.5f;
         static const float table[];
 
         enum {
@@ -34,7 +38,7 @@ namespace dspkit {
                 state = Stopped;
                 return;
             }
-            iCurPos = (int) fCurPos;
+            iCurPos = static_cast<int>(fCurPos);
         }
 
         void fall() {
@@ -45,7 +49,7 @@ namespace dspkit {
                 state = Stopped;
                 return;
             }
-            iCurPos = (int) fCurPos;
+            iCurPos = static_cast<int>(fCurPos);
         }
 
     public:
@@ -67,14 +71,18 @@ namespace dspkit {
         void setTarget(float pos) {
             fTarget = std::fmax(0.f, std::fmin(posMax, pos * (float) tableSize));
             iTarget = (int) fTarget;
-            inc = (fTarget - fCurPos) / (time * sr);
-            state = iTarget == iCurPos ? Stopped :
-                    (inc > 0.f ? Rising : Falling);
+            if (time <= std::numeric_limits<float>::epsilon()) {
+                setPos(fTarget);
+            } else {
+                inc = time > 0 ? (fTarget - fCurPos) / (time * sr) : tableSize;
+                state = iTarget == iCurPos ? Stopped :
+                        (inc > 0.f ? Rising : Falling);
+            }
         }
 
         void setPos(float pos) {
             fCurPos = std::fmax(0.f, std::fmin(posMax, pos * (float) tableSize));
-            iCurPos = (int)fCurPos;
+            iCurPos =static_cast<int>(fCurPos);
             state = Stopped;
         }
 
@@ -88,7 +96,7 @@ namespace dspkit {
             return table[iCurPos];
         }
 
-        float getCurrentValue() {
+        [[nodiscard]] float getCurrentValue() const {
             return table[iCurPos];
         }
     };
