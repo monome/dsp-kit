@@ -1,5 +1,4 @@
 #include <cmath>
-#include <boost/assert.hpp>
 
 #include "Lut.hpp"
 #include "Svf.hpp"
