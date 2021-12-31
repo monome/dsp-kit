@@ -1,5 +1,5 @@
 # dsp-kit
 
-common DSP utilities for monome.org
+common DSP utilities for monome
 
-(work in progress)
+(work in progress, eternally)
